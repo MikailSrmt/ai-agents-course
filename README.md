@@ -5,7 +5,17 @@ This repository contains code and notebooks for the AI Agents course from Huggin
 ## Setup
 
 1. Clone this repository
-2. Create and activate the virtual environment:
+2. Create a virtual environment:
+
+```bash
+# On macOS/Linux
+python -m venv venv
+
+# On Windows
+python -m venv venv
+```
+
+3. Activate the virtual environment:
 
 ```bash
 # On macOS/Linux
@@ -15,7 +25,7 @@ source venv/bin/activate
 venv\Scripts\activate
 ```
 
-3. Install the required dependencies:
+4. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -25,11 +35,16 @@ pip install -r requirements.txt
 
 - `notebooks/`: Jupyter notebooks for the course
 - `src/`: Source code for AI agents
-- `venv/`: Python virtual environment
 
 ## Getting Started
 
 After setting up the environment, you can start by exploring the notebooks in the `notebooks/` directory.
+
+You can also run the initialization script to set up everything automatically:
+
+```bash
+./init.sh  # On macOS/Linux
+```
 
 ## Resources
 
