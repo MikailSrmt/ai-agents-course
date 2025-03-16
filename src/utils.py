@@ -5,6 +5,12 @@ Utility functions for the AI Agents course.
 import os
 import torch
 from transformers import AutoTokenizer, AutoModel
+from pathlib import Path
+import sys
+
+# Add the parent directory to the path to import the env_utils module
+sys.path.append(str(Path(__file__).parent.parent))
+from src.env_utils import get_env
 
 def check_environment():
     """
@@ -30,6 +36,10 @@ def check_environment():
         env_info["cuda_version"] = torch.version.cuda
         env_info["gpu_name"] = torch.cuda.get_device_name(0)
     
+    # Check for API tokens
+    env_info["huggingface_token"] = "Available" if get_env("HUGGINGFACE_TOKEN") else "Not set"
+    env_info["openai_api_key"] = "Available" if get_env("OPENAI_API_KEY") else "Not set"
+    
     return env_info
 
 def load_hf_model(model_name, device=None):
@@ -48,8 +58,16 @@ def load_hf_model(model_name, device=None):
     
     print(f"Loading {model_name} on {device}...")
     
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModel.from_pretrained(model_name).to(device)
+    # Get HuggingFace token from environment variables
+    hf_token = get_env("HUGGINGFACE_TOKEN")
+    
+    # Use token if available
+    if hf_token:
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+        model = AutoModel.from_pretrained(model_name, token=hf_token).to(device)
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = AutoModel.from_pretrained(model_name).to(device)
     
     return tokenizer, model
 

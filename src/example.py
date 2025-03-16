@@ -4,10 +4,12 @@ Example script demonstrating the use of utility functions.
 
 import sys
 import os
+from pathlib import Path
 
 # Add the parent directory to the path to import the utils module
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(str(Path(__file__).parent.parent))
 from src.utils import check_environment, load_hf_model, create_agent_environment
+from src.env_utils import get_env, require_env
 
 def main():
     """
@@ -23,7 +25,9 @@ def main():
     
     # Create a simple agent environment
     try:
-        env = create_agent_environment("CartPole-v1")
+        env_name = get_env("GYM_ENV", "CartPole-v1")
+        print(f"Using environment from config: {env_name}")
+        env = create_agent_environment(env_name)
         
         # Run a few random steps
         observation, info = env.reset(seed=42)
@@ -40,9 +44,19 @@ def main():
     
     # Load a small model from Hugging Face (if needed)
     try:
-        print("Loading a small model from Hugging Face...")
-        # Using a tiny model for demonstration
-        tokenizer, model = load_hf_model("prajjwal1/bert-tiny")
+        # Get model name from environment variables or use default
+        model_name = get_env("EMBEDDING_MODEL", "prajjwal1/bert-tiny")
+        print(f"Loading model from config: {model_name}")
+        
+        # Check if HuggingFace token is available
+        hf_token = get_env("HUGGINGFACE_TOKEN")
+        if hf_token:
+            print("Using HuggingFace token from environment variables")
+        else:
+            print("No HuggingFace token found in environment variables")
+        
+        # Load the model
+        tokenizer, model = load_hf_model(model_name)
         
         # Test the model with a simple input
         inputs = tokenizer("Hello, I'm learning about AI agents!", return_tensors="pt")

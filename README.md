@@ -31,10 +31,35 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+5. Set up environment variables:
+
+```bash
+# Copy the template file
+cp .env.template .env
+
+# Edit the .env file with your API keys and tokens
+nano .env  # or use any text editor
+```
+
 ## Project Structure
 
 - `notebooks/`: Jupyter notebooks for the course
 - `src/`: Source code for AI agents
+- `.env.template`: Template for environment variables
+- `.env`: Your personal environment variables (not committed to Git)
+
+## Environment Variables
+
+This project uses environment variables to manage API keys and configuration. The following variables are supported:
+
+- `HUGGINGFACE_TOKEN`: Your Hugging Face API token
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `MODEL_NAME`: The name of the model to use
+- `EMBEDDING_MODEL`: The name of the embedding model to use
+- `DATA_DIR`: Directory for data files
+- `MODELS_DIR`: Directory for model files
+
+You can add your own environment variables as needed.
 
 ## Getting Started
 
@@ -44,6 +69,12 @@ You can also run the initialization script to set up everything automatically:
 
 ```bash
 ./init.sh  # On macOS/Linux
+```
+
+To test your environment variables setup, run:
+
+```bash
+python src/env_example.py
 ```
 
 ## Resources
